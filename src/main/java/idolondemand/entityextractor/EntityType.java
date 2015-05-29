@@ -1,4 +1,4 @@
-package idolondemand;
+package idolondemand.entityextractor;
 
 /**
  * @author Daniyar Itegulov

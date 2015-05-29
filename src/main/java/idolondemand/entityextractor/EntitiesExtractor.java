@@ -1,5 +1,9 @@
-package idolondemand;
+package idolondemand.entityextractor;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import idolondemand.Constants;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -16,6 +20,8 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Daniyar Itegulov
@@ -25,19 +31,19 @@ public class EntitiesExtractor {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko)" +
             " Chrome/41.0.2228.0 Safari/537.36";
 
-    public static String fetchByText(String text, EntityType... types) throws IOException {
+    public static Set<String> fetchByText(String text, EntityType... types) throws IOException {
         StringBuilder generated = new StringBuilder(BASE_URL).append("?apikey=")
                 .append(Constants.API_KEY).append("&text=").append(URLEncoder.encode(text, "UTF-8"));
-        return process(generated, types);
+        return JSONParse(process(generated, types));
     }
 
-    public static String fetchByURL(String url, EntityType... types) throws IOException {
+    public static Set<String> fetchByURL(String url, EntityType... types) throws IOException {
         StringBuilder generated = new StringBuilder(BASE_URL).append("?apikey=")
                 .append(Constants.API_KEY).append("&url=").append(URLEncoder.encode(url, "UTF-8"));
-        return process(generated, types);
+        return JSONParse(process(generated, types));
     }
 
-    public static String fetchByFile(File file, EntityType... types) throws IOException {
+    public static Set<String> fetchByFile(File file, EntityType... types) throws IOException {
         HttpPost request = new HttpPost(BASE_URL);
         request.addHeader("User-Agent", USER_AGENT);
         FileBody fileBody = new FileBody(file);
@@ -60,8 +66,7 @@ public class EntitiesExtractor {
             }
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
-                //responseEntity.writeTo(System.out);
-                return EntityUtils.toString(responseEntity);
+                return JSONParse(EntityUtils.toString(responseEntity));
             } else {
                 throw new IllegalStateException("No entity");
             }
@@ -90,4 +95,17 @@ public class EntitiesExtractor {
             }
         }
     }
+
+    private static Set<String> JSONParse(String json) {
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse(json).getAsJsonObject();
+        JsonArray entities = object.getAsJsonArray("entities");
+        Set<String> res = new HashSet<>();
+        for (int i = 0; i < entities.size(); i++) {
+            JsonObject jsonObject = entities.get(i).getAsJsonObject();
+            res.add(jsonObject.get("normalized_text").getAsString());
+        }
+        return res;
+    }
+
 }
