@@ -62,6 +62,11 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+# Tomcat trash
+tomcat.5000
+
+# Maven binaries
+target
 
 # My run script
 run.sh
