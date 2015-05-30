@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Ignat Loskutov
@@ -32,7 +33,7 @@ public class JsonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String query = req.getParameter("q");
-        List<String> tags = null;
+        Set<String> tags;
         try {
             tags = TagExtractor.findMatching(query);
         } catch (ClassNotFoundException | SQLException | URISyntaxException e) {

@@ -83,17 +83,17 @@ public class TagExtractor {
         return result;
     }
 
-    public static List<String> findMatching(String string) throws ClassNotFoundException, SQLException, URISyntaxException {
+    public static Set<String> findMatching(String string) throws ClassNotFoundException, SQLException, URISyntaxException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag LIKE '%" + string + "%'");
-        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
         while (rs.next()) {
             String tag = rs.getString("tag");
-            list.add(tag);
+            set.add(tag);
         }
         connection.close();
-        return list;
+        return set;
     }
 
     public static List<Long> findFileIds(String tag) throws ClassNotFoundException, SQLException, URISyntaxException {
