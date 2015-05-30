@@ -32,6 +32,7 @@ public class BoxListServlet extends HttpServlet {
         String tag = req.getParameter("tag");
         String entity = req.getParameter("entity");
         BoxAccount boxAccount = new BoxAccount(entity);
+        System.out.println("Let's find " + tag + " in " + boxAccount);
         Set<Long> set;
         try {
             set = TagExtractor.findFileIds(tag);
