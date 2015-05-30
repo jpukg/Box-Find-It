@@ -100,16 +100,16 @@ public class TagExtractor {
         return set;
     }
 
-    public static List<Long> findFileIds(String tag) throws ClassNotFoundException, SQLException, URISyntaxException {
+    public static Set<Long> findFileIds(String tag) throws ClassNotFoundException, SQLException, URISyntaxException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT DISTINCT file_id FROM tags WHERE '" + tag + "' = ANY(tag)");
-        List<Long> list = new ArrayList<>();
+        Set<Long> set = new HashSet<>();
         while (rs.next()) {
             long id = rs.getLong("file_id");
-            list.add(id);
+            set.add(id);
         }
         connection.close();
-        return list;
+        return set;
     }
 }
