@@ -11,9 +11,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * @author Daniyar Itegulov
@@ -73,5 +72,18 @@ public class TagExtractor {
             }
         }
         return result;
+    }
+
+    public static List<String> findMatching(String string) throws ClassNotFoundException, SQLException, URISyntaxException {
+        Connection connection = getConnection();
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT tag FROM tags WHERE ANY(tag) LIKE '%" + string + "%'");
+        List<String> list = new ArrayList<>();
+        while (rs.next()) {
+            Array array = rs.getArray("tag");
+            String[] tags = (String[]) array.getArray();
+            Collections.addAll(list, tags);
+        }
+        return list;
     }
 }

@@ -1,5 +1,7 @@
 package servlets;
 
+import ourapp.TagExtractor;
+
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.servlet.ServletException;
@@ -9,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Ignat Loskutov
@@ -27,7 +32,14 @@ public class JsonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String query = req.getParameter("q");
-        Collection<String> tags = getTags(query);
+        List<String> tags = null;
+        try {
+            tags = TagExtractor.findMatching(query);
+        } catch (ClassNotFoundException | SQLException | URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+        //Collection<String> tags = getTags(query);
         try (OutputStream os = resp.getOutputStream()) {
             try (final JsonGenerator generator = Json.createGenerator(os)) {
                 generator.writeStartArray();
