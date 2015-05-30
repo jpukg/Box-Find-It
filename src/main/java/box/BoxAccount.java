@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class BoxAccount {
     private static final String FOLDERS_URL = "https://api.box.com/2.0/folders/";
-    private static final String FILES_URL = "https://upload.box.com/api/2.0/files/";
+    private static final String FILES_URL = "https://api.box.com/2.0/files/";
     private static final JsonParser parser = new JsonParser();
     private String accessToken;
     private String refreshToken;
