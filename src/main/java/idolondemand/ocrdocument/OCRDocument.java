@@ -51,7 +51,8 @@ public class OCRDocument {
                 String string = EntityUtils.toString(responseEntity);
                 System.out.println(string);
                 JsonObject jsonObject = parser.parse(string).getAsJsonObject();
-                return jsonObject.get("text_block").getAsJsonArray().get(0).getAsJsonObject().get("text").getAsString();
+                return jsonObject.get("text_block").getAsJsonArray().get(0)
+                        .getAsJsonObject().get("text").getAsString().replace("\\n", " ");
             } else {
                 throw new IllegalStateException("No entity");
             }
