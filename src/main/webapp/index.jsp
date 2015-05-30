@@ -114,12 +114,19 @@
                 $('#tags a').tagcloud();
             });
 
+            mda = function() {
+                var parent = document.getElementsByTagName("body")[0];
+                parent.removeChild(document.getElementById("tags"));
+                document.write("mda chet");
+            }
+
         });
     </script>
 </head>
 <body class="container-fluid">
 
 <%
+    String entityString = "";
     PrintWriter pw = response.getWriter(); {
         if (request.getAttribute("error") != null) {
             pw.println("Something went wrong, sorry");
@@ -141,7 +148,7 @@
                 HttpResponse resp = httpclient.execute(post);
                 HttpEntity entity = resp.getEntity();
                 if (entity != null) {
-                    String entityString = EntityUtils.toString(entity);
+                    entityString = EntityUtils.toString(entity);
                     pw.println(entityString);
                     BoxAccount boxAccount = new BoxAccount(entityString);
                     pw.println(boxAccount);
@@ -155,9 +162,10 @@
     }
 %>
 
-<form class="col-lg-12" method="get" action="result.jsp">
+<form class="col-lg-12" method="get" onsubmit="mda()">
     <div class="input-group">
         <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
+        <input type="hidden" name="entity" value="<%pw.write(entityString);%>">
       <span class="input-group-btn">
         <button class="btn btn-default" type="submit">Go!</button>
       </span>
