@@ -106,7 +106,7 @@
             });
 
             $.fn.tagcloud.defaults = {
-                size: {start: 14, end: 18, unit: 'pt'},
+                size: {start: 14, end: 36, unit: 'pt'},
                 color: {start: '#cde', end: '#f52'}
             };
 
@@ -118,7 +118,12 @@
 
         function mda() {
             var body = document.getElementsByTagName("body")[0];
-            body.removeChild(body.lastChild);
+            var tags = document.getElementById("tags");
+            if (tags != undefined) {
+                body.removeChild(tags);
+            } else {
+                body.removeChild(body.lastChild);
+            }
             var results = document.createElement("div");
             results.id = "results";
             results.className = "row";
@@ -138,46 +143,45 @@
 <%
     String entityString = "";
     PrintWriter pw = response.getWriter(); {
-        if (request.getAttribute("error") != null) {
-            pw.println("Something went wrong, sorry");
+    if (request.getAttribute("error") != null) {
+        pw.println("Something went wrong, sorry");
+    } else {
+        String code = request.getParameter("code");
+        String state = request.getParameter("state");
+        pw.println("Mda chet");
+        if (!state.equals("kudah")) {
+            pw.println("Malformed request, sorry");
         } else {
-            String code = request.getParameter("code");
-            String state = request.getParameter("state");
-            pw.println("Mda chet");
-            if (!state.equals("kudah")) {
-                pw.println("Malformed request, sorry");
+            HttpClient httpclient = HttpClients.createDefault();
+            HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
+            List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+            params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+            params.add(new BasicNameValuePair("code", code));
+            params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
+            params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
+            post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+            HttpResponse resp = httpclient.execute(post);
+            HttpEntity entity = resp.getEntity();
+            if (entity != null) {
+                entityString = EntityUtils.toString(entity);
+                pw.println(entityString);
+                BoxAccount boxAccount = new BoxAccount(entityString);
+                pw.println(boxAccount);
+                Set<String> set = TagExtractor.extract(boxAccount);
+                pw.println(set);
             } else {
-                HttpClient httpclient = HttpClients.createDefault();
-                HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
-                List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-                params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-                params.add(new BasicNameValuePair("code", code));
-                params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
-                params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
-                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-                HttpResponse resp = httpclient.execute(post);
-                HttpEntity entity = resp.getEntity();
-                if (entity != null) {
-                    entityString = EntityUtils.toString(entity);
-                    pw.println(entityString);
-                    BoxAccount boxAccount = new BoxAccount(entityString);
-                    pw.println(boxAccount);
-                    Set<String> set = TagExtractor.extract(boxAccount);
-                    pw.println(set);
-                } else {
-                    pw.println("Ti che vashe ti che");
-                }
+                pw.println("Ti che vashe ti che");
             }
         }
     }
+}
 %>
 
 <form class="col-lg-12" method="get" onsubmit="mda();">
     <div class="input-group">
         <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
-        <input type="hidden" name="entity" value="<%pw.write(entityString);%>">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="submit">Go!</button>
+        <input class="btn btn-default" type="submit" value="Go!">
       </span>
     </div>
 </form>
