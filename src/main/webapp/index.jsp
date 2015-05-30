@@ -132,7 +132,7 @@
             } else {
                 HttpClient httpclient = HttpClients.createDefault();
                 HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
-                List<NameValuePair> params = new ArrayList<>(2);
+                List<NameValuePair> params = new ArrayList<NameValuePair>(2);
                 params.add(new BasicNameValuePair("grant_type", "authorization_code"));
                 params.add(new BasicNameValuePair("code", code));
                 params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
