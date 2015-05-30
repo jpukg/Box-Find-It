@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,33 +31,32 @@ import java.util.List;
 public class AuthCompleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getAttribute("error") != null) {
-            resp.getOutputStream().write("Something went wrong, sorry".getBytes());
-        } else {
-            String code = req.getParameter("code");
-            String state = req.getParameter("state");
-            resp.getOutputStream().write((code + " ").getBytes());
-            resp.getOutputStream().write((state + "\n").getBytes());
-            if (!state.equals("kudah")) {
-                resp.getOutputStream().write("Malformed request, sorry".getBytes());
+        try (PrintWriter pw = resp.getWriter()) {
+            if (req.getAttribute("error") != null) {
+                pw.println("Something went wrong, sorry");
             } else {
-                HttpClient httpclient = HttpClients.createDefault();
-                HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
-                List<NameValuePair> params = new ArrayList<>(2);
-                params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-                params.add(new BasicNameValuePair("code", code));
-                params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
-                params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
-                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-                HttpResponse response = httpclient.execute(post);
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    BoxAccount boxAccount = new BoxAccount(EntityUtils.toString(entity));
-                    resp.getWriter().println(boxAccount);
+                String code = req.getParameter("code");
+                String state = req.getParameter("state");
+                pw.println("Mda chet");
+                if (!state.equals("kudah")) {
+                    pw.println("Malformed request, sorry");
+                } else {
+                    HttpClient httpclient = HttpClients.createDefault();
+                    HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
+                    List<NameValuePair> params = new ArrayList<>(2);
+                    params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+                    params.add(new BasicNameValuePair("code", code));
+                    params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
+                    params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
+                    post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+                    HttpResponse response = httpclient.execute(post);
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        BoxAccount boxAccount = new BoxAccount(EntityUtils.toString(entity));
+                        pw.println(boxAccount);
+                    }
                 }
             }
         }
-        resp.getOutputStream().flush();
-        resp.getOutputStream().close();
     }
 }
