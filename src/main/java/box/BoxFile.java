@@ -1,5 +1,6 @@
 package box;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.joda.time.DateTime;
@@ -21,10 +22,10 @@ public class BoxFile implements BoxElement {
         id = jsonObject.get("id").getAsLong();
         name = jsonObject.get("name").getAsString();
         size = jsonObject.get("size").getAsLong();
-        String created = jsonObject.get("created_at").getAsString();
-        createdAt = created != null ? ISODateTimeFormat.dateTime().parseDateTime(created) : null;
-        String modified = jsonObject.get("modified_at").getAsString();
-        modifiedAt = modified != null ? ISODateTimeFormat.dateTime().parseDateTime(modified) : null;
+        JsonElement created = jsonObject.get("created_at");
+        createdAt = !created.isJsonNull() ? ISODateTimeFormat.dateTime().parseDateTime(created.getAsString()) : null;
+        JsonElement modified = jsonObject.get("modified_at");
+        modifiedAt = !modified.isJsonNull() ? ISODateTimeFormat.dateTime().parseDateTime(modified.getAsString()) : null;
         this.boxAccount = boxAccount;
     }
 

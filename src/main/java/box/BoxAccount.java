@@ -35,11 +35,12 @@ public class BoxAccount {
         HttpClient httpclient = HttpClientBuilder.create().build();
         try (CloseableHttpResponse response = (CloseableHttpResponse) httpclient.execute(request)) {
             StatusLine statusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
             System.out.println("List: " + statusLine);
             if (statusLine.getStatusCode() != 200) {
+                System.out.println("List: " + EntityUtils.toString(entity));
                 throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
-            HttpEntity entity = response.getEntity();
             if (entity != null) {
                 String entityString = EntityUtils.toString(entity);
                 System.out.println("List: GOT " + entityString);
