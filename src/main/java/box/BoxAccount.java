@@ -40,6 +40,7 @@ public class BoxAccount {
             HttpEntity entity = response.getEntity();
             System.out.println("getFile: " + statusLine);
             if (statusLine.getStatusCode() != 200) {
+                System.out.println("Tried to get " + fileId + ", but something got wrong");
                 System.out.println("getFile: " + EntityUtils.toString(entity));
                 throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
