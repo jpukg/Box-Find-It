@@ -116,8 +116,8 @@
 
             function mda() {
                 var parent = document.getElementsByTagName("body")[0];
-                parent.removeChild(document.getElementById("tags"));
-                document.write("mda chet");
+                parent.removeChild(parent.getElementById("tags"));
+//                document.write("mda ");
             }
 
         });
@@ -162,7 +162,7 @@
     }
 %>
 
-<form class="col-lg-12" method="get" onsubmit="mda()">
+<form class="col-lg-12" method="get" onsubmit="mda();">
     <div class="input-group">
         <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
         <input type="hidden" name="entity" value="<%pw.write(entityString);%>">
