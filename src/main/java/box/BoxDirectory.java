@@ -29,8 +29,10 @@ public class BoxDirectory implements BoxElement {
         id = jsonObject.get("id").getAsLong();
         name = jsonObject.get("name").getAsString();
         size = jsonObject.get("size").getAsLong();
-        createdAt = ISODateTimeFormat.dateTime().parseDateTime(jsonObject.get("created_at").getAsString());
-        modifiedAt = ISODateTimeFormat.dateTime().parseDateTime(jsonObject.get("modified_at").getAsString());
+        String created = jsonObject.get("created_at").getAsString();
+        createdAt = created != null ? ISODateTimeFormat.dateTime().parseDateTime(created) : null;
+        String modified = jsonObject.get("modified_at").getAsString();
+        modifiedAt = modified != null ? ISODateTimeFormat.dateTime().parseDateTime(modified) : null;
         JsonArray entities = jsonObject.get("item_collection").getAsJsonObject().get("entries").getAsJsonArray();
         this.boxAccount = boxAccount;
         for (JsonElement element : entities) {
