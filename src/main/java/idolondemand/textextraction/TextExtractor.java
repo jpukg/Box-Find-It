@@ -48,7 +48,9 @@ public class TextExtractor {
             }
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
-                JsonObject jsonObject = parser.parse(EntityUtils.toString(responseEntity)).getAsJsonObject();
+                String string = EntityUtils.toString(responseEntity);
+                System.out.println(string);
+                JsonObject jsonObject = parser.parse(string).getAsJsonObject();
                 return jsonObject.get("content").getAsString();
             } else {
                 throw new IllegalStateException("No entity");
