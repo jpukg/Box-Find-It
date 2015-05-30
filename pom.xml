@@ -94,6 +94,11 @@
             <artifactId>commons-io</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.livesense</groupId>
+            <artifactId>org.liveSense.fragment.javax.activation-jre-1.6</artifactId>
+            <version>1.0.5</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>webappRunnerSample</finalName>

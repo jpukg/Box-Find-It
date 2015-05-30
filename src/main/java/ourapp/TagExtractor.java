@@ -6,9 +6,11 @@ import box.BoxElement;
 import box.BoxFile;
 import idolondemand.entityextractor.EntitiesExtractor;
 import idolondemand.entityextractor.EntityType;
+import idolondemand.ocrdocument.OCRDocument;
 import idolondemand.textextraction.TextExtractor;
 import org.apache.commons.io.FileUtils;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -57,7 +59,15 @@ public class TagExtractor {
                     byte[] data = boxAccount.getFileContent(file.getId());
                     File f = Files.createTempFile("hackathonapp", "elitebox").toFile();
                     FileUtils.writeByteArrayToFile(f, data);
-                    String stringData = TextExtractor.fetchByFile(f);
+                    String mimeType = new MimetypesFileTypeMap().getContentType(f);
+                    System.out.println("Mime type: " + mimeType);
+                    String stringData;
+                    if (mimeType.startsWith("image/")) {
+                        System.out.println("It's an image");
+                        stringData = OCRDocument.fetchByFile(f);
+                    } else {
+                        stringData = TextExtractor.fetchByFile(f);
+                    }
                     FileUtils.writeStringToFile(f, stringData);
                     Set<String> tags = EntitiesExtractor.fetchByFile(f, EntityType.PEOPLE_ENG,
                             EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG);
