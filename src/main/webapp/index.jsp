@@ -117,9 +117,18 @@
         });
 
         function mda() {
-            var parent = document.getElementsByTagName("body")[0];
-            parent.removeChild(parent.getElementById("tags"));
+            var body = document.getElementsByTagName("body")[0];
+            var child = document.getElementById("tags");
+            if (child != undefined) {
+                body.removeChild(child);
 //                document.write("mda ");
+            } else {
+                var results = document.createElement("div");
+                results.id = "results";
+                var textNode = document.createTextNode("Hello! I’m a new DIV!");
+                results.appendChild(textNode);
+                body.appendChild(results);
+            }
         }
     </script>
 </head>
