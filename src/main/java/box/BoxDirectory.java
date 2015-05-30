@@ -35,7 +35,7 @@ public class BoxDirectory implements BoxElement {
         this.boxAccount = boxAccount;
         for (JsonElement element : entities) {
             JsonObject elementObject = element.getAsJsonObject();
-            elementList.add(BoxParser.parse(boxAccount.list(elementObject.get("id").getAsLong())));
+            elementList.add(BoxParser.parse(boxAccount.list(elementObject.get("id").getAsLong()), boxAccount));
         }
     }
 
