@@ -135,6 +135,7 @@
                 results.appendChild(cell);
             }
             body.appendChild(results);
+            return false;
         }
     </script>
 </head>
