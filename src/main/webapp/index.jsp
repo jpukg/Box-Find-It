@@ -118,17 +118,18 @@
 
         function mda() {
             var body = document.getElementsByTagName("body")[0];
-            var child = document.getElementById("tags");
-            if (child != undefined) {
-                body.removeChild(child);
-//                document.write("mda ");
-            } else {
-                var results = document.createElement("div");
-                results.id = "results";
-                var textNode = document.createTextNode("Hello! I’m a new DIV!");
-                results.appendChild(textNode);
-                body.appendChild(results);
+            body.removeChild(body.lastChild);
+            var results = document.createElement("div");
+            results.id = "results";
+            results.className = "row";
+            for (var i = 0; i < 20; i++) {
+                var cell = document.createElement("div");
+                cell.className = "col-md-3";
+                var textNode = document.createTextNode("mda cell " + i);
+                cell.appendChild(textNode);
+                results.appendChild(cell);
             }
+            body.appendChild(results);
         }
     </script>
 </head>
