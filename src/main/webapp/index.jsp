@@ -120,7 +120,7 @@
 <body class="container-fluid">
 
 <%
-    try (PrintWriter pw = response.getWriter()) {
+    PrintWriter pw = response.getWriter(); {
         if (request.getAttribute("error") != null) {
             pw.println("Something went wrong, sorry");
         } else {
