@@ -41,9 +41,9 @@ public class BoxListServlet extends HttpServlet {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"elements\":[");
+        sb.append("[");
         query(sb, boxAccount.getRoot(), set);
-        sb.append("]}");
+        sb.append("]");
         try (PrintWriter pw = resp.getWriter()) {
             pw.println(sb.toString());
         }
