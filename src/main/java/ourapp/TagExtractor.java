@@ -10,13 +10,11 @@ import idolondemand.ocrdocument.OCRDocument;
 import idolondemand.textextraction.TextExtractor;
 import org.apache.commons.io.FileUtils;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -60,16 +58,9 @@ public class TagExtractor {
                     File f = Files.createTempFile("hackathonapp", "elitebox").toFile();
                     FileUtils.writeByteArrayToFile(f, data);
                     String stringData;
-                    if (f.getName().endsWith(".jpg") ||
-                            f.getName().endsWith(".jpeg") ||
-                            f.getName().endsWith(".gif") ||
-                            f.getName().endsWith(".png") ||
-                            f.getName().endsWith(".bmp") ||
-                            f.getName().endsWith(".tiff")) {
-                        System.out.println("It's an image");
+                    stringData = TextExtractor.fetchByFile(f);
+                    if (stringData.equals("")) {
                         stringData = OCRDocument.fetchByFile(f);
-                    } else {
-                        stringData = TextExtractor.fetchByFile(f);
                     }
                     FileUtils.writeStringToFile(f, stringData);
                     Set<String> tags = EntitiesExtractor.fetchByFile(f, EntityType.PEOPLE_ENG,

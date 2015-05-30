@@ -40,7 +40,7 @@ public class BoxAccount {
             System.out.println("getFileContent: " + statusLine);
             if (statusLine.getStatusCode() != 200) {
                 System.out.println("Tried to get content of " + fileId + ", but something got wrong");
-                System.out.println("getFileContent: " + EntityUtils.toString(entity));
+                //System.out.println("getFileContent: " + EntityUtils.toString(entity));
                 throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
             if (entity != null) {
