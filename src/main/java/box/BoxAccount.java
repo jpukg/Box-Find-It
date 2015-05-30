@@ -23,7 +23,6 @@ public class BoxAccount {
     private BoxElement root;
 
     public BoxAccount(String json) throws IOException {
-        JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(json).getAsJsonObject();
         accessToken = jsonObject.get("access_token").getAsString();
         refreshToken = jsonObject.get("refresh_token").getAsString();
@@ -36,13 +35,15 @@ public class BoxAccount {
         HttpClient httpclient = HttpClientBuilder.create().build();
         try (CloseableHttpResponse response = (CloseableHttpResponse) httpclient.execute(request)) {
             StatusLine statusLine = response.getStatusLine();
-            System.out.println(statusLine);
+            System.out.println("List: " + statusLine);
             if (statusLine.getStatusCode() != 200) {
                 throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
             HttpEntity entity = response.getEntity();
             if (entity != null) {
-                return EntityUtils.toString(entity);
+                String entityString = EntityUtils.toString(entity);
+                System.out.println("List: GOT " + entityString);
+                return entityString;
             } else {
                 throw new IllegalStateException("No entity");
             }
