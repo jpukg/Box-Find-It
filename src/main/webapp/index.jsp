@@ -122,9 +122,9 @@
 }
 %>
 
-<form class="col-lg-12" method="get" onsubmit="doSearch(); return false;">
+<form class="col-lg-12" method="get" onsubmit="doSearch($('#q').val()); return false;">
     <div class="input-group">
-        <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
+        <input type="text" class="form-control typeahead" id="q" placeholder="Search for...">
       <span class="input-group-btn">
         <input class="btn btn-default" type="submit" value="Go!">
       </span>
@@ -185,7 +185,7 @@
         var results = document.createElement("div");
         results.id = "results";
         results.className = "row";
-        $.getJSON("/find?tag=" + s + "&entity=<%pw.write(URLEncoder.encode(entityString, "UTF-8"));%>", function(data) {
+        $.getJSON("/find?tag=" + s + "&entity=<%= URLEncoder.encode(entityString, "UTF-8") %>", function(data) {
             $.each(data, function(key, val) {
                 alert(val.name);
             });
