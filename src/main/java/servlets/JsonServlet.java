@@ -26,9 +26,6 @@ import java.util.Set;
         urlPatterns = {"/query.json"}
 )
 public class JsonServlet extends HttpServlet {
-    Collection<String> getTags(String pattern) {
-        return Arrays.asList("Genka", "Gennady Korotkevich", "Windows Genuine Advantage", "Kudah", "Kukarek", "Mamku tvoyu ebal");
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,7 +37,6 @@ public class JsonServlet extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        //Collection<String> tags = getTags(query);
         try (OutputStream os = resp.getOutputStream()) {
             try (final JsonGenerator generator = Json.createGenerator(os)) {
                 generator.writeStartArray();
