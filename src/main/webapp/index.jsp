@@ -114,7 +114,7 @@
                 $('#tags a').tagcloud();
             });
 
-            mda = function() {
+            function mda() {
                 var parent = document.getElementsByTagName("body")[0];
                 parent.removeChild(document.getElementById("tags"));
                 document.write("mda chet");
