@@ -184,7 +184,7 @@
         var results = document.createElement("div");
         results.id = "results";
         results.className = "row";
-        $.getJSON("/find?query=" + s + "&entity=<%pw.write(entityString);%>", function(data) {
+        $.getJSON("/find?tag=" + s + "&entity=<%pw.write(entityString);%>", function(data) {
             $.each(data, function(key, val) {
                 alert(val.name);
             });
