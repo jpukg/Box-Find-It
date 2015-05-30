@@ -1,3 +1,19 @@
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="org.apache.http.client.HttpClient" %>
+<%@ page import="org.apache.http.impl.client.HttpClients" %>
+<%@ page import="org.apache.http.client.methods.HttpPost" %>
+<%@ page import="org.apache.http.NameValuePair" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="org.apache.http.message.BasicNameValuePair" %>
+<%@ page import="servlets.BoxApiConstants" %>
+<%@ page import="org.apache.http.client.entity.UrlEncodedFormEntity" %>
+<%@ page import="org.apache.http.HttpResponse" %>
+<%@ page import="org.apache.http.HttpEntity" %>
+<%@ page import="org.apache.http.util.EntityUtils" %>
+<%@ page import="box.BoxAccount" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="ourapp.TagExtractor" %>
 <!doctype html>
 <html>
 <head>
@@ -102,6 +118,42 @@
     </script>
 </head>
 <body class="container-fluid">
+
+<%
+    try (PrintWriter pw = response.getWriter()) {
+        if (request.getAttribute("error") != null) {
+            pw.println("Something went wrong, sorry");
+        } else {
+            String code = request.getParameter("code");
+            String state = request.getParameter("state");
+            pw.println("Mda chet");
+            if (!state.equals("kudah")) {
+                pw.println("Malformed request, sorry");
+            } else {
+                HttpClient httpclient = HttpClients.createDefault();
+                HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
+                List<NameValuePair> params = new ArrayList<>(2);
+                params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+                params.add(new BasicNameValuePair("code", code));
+                params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
+                params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
+                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+                HttpResponse resp = httpclient.execute(post);
+                HttpEntity entity = resp.getEntity();
+                if (entity != null) {
+                    String entityString = EntityUtils.toString(entity);
+                    pw.println(entityString);
+                    BoxAccount boxAccount = new BoxAccount(entityString);
+                    pw.println(boxAccount);
+                    Set<String> set = TagExtractor.extract(boxAccount);
+                    pw.println(set);
+                } else {
+                    pw.println("Ti che vashe ti che");
+                }
+            }
+        }
+    }
+%>
 
 <form class="col-lg-12">
     <div class="input-group">
