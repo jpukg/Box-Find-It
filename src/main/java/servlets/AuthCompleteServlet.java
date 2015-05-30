@@ -1,7 +1,6 @@
 package servlets;
 
-import box.BoxList;
-import com.google.gson.JsonParser;
+import box.BoxAccount;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +51,8 @@ public class AuthCompleteServlet extends HttpServlet {
                 HttpResponse response = httpclient.execute(post);
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
-                    JsonParser parser = new JsonParser();
-                    String accessToken = parser.parse(EntityUtils.toString(entity))
-                            .getAsJsonObject().get("access_token").getAsString();
-                    resp.getOutputStream().write(accessToken.getBytes());
-                    resp.getOutputStream().write(BoxList.list(0, accessToken).getBytes());
+                    BoxAccount boxAccount = new BoxAccount(EntityUtils.toString(entity));
+                    resp.getWriter().println(boxAccount);
                 }
             }
         }

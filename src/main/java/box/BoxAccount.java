@@ -1,5 +1,7 @@
 package box;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -13,11 +15,23 @@ import java.io.IOException;
 /**
  * @author Daniyar Itegulov
  */
-public class BoxList {
-    private static final String BASE_URL = "https://api.box.com/2.0/folders/";
+public class BoxAccount {
+    private static final String FOLDERS_URL = "https://api.box.com/2.0/folders/";
+    private static final JsonParser parser = new JsonParser();
+    private String accessToken;
+    private String refreshToken;
+    private BoxElement root;
 
-    public static String list(int folderId, String accessToken) throws IOException {
-        HttpGet request = new HttpGet(BASE_URL + folderId);
+    public BoxAccount(String json) throws IOException {
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject = parser.parse(json).getAsJsonObject();
+        accessToken = jsonObject.get("access_token").getAsString();
+        refreshToken = jsonObject.get("refresh_token").getAsString();
+        root = BoxParser.parse(list(0));
+    }
+
+    public String list(long folderId) throws IOException {
+        HttpGet request = new HttpGet(FOLDERS_URL + folderId);
         request.addHeader("Authorization", "Bearer " + accessToken);
         HttpClient httpclient = HttpClientBuilder.create().build();
         try (CloseableHttpResponse response = (CloseableHttpResponse) httpclient.execute(request)) {
@@ -33,5 +47,15 @@ public class BoxList {
                 throw new IllegalStateException("No entity");
             }
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return "BoxAccount{" +
+                "accessToken='" + accessToken + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", root=" + root +
+                '}';
     }
 }
