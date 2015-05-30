@@ -10,7 +10,7 @@
 <h1>Hello!</h1>
 <%
     PrintWriter pw = response.getWriter();
-    if (request.getAttribute("q") != null) {
+    if (request.getParameter("q") != null) {
         pw.println("Your query is " + request.getAttribute("q"));
     }
 %>
