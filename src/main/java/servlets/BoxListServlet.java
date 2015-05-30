@@ -50,7 +50,7 @@ public class BoxListServlet extends HttpServlet {
         Set<Long> set;
         try {
             set = TagExtractor.findFileIds(tag);
-        } catch (SQLException | URISyntaxException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
             return;
         }
