@@ -1,6 +1,11 @@
 package servlets;
 
 import box.BoxAccount;
+import box.BoxDirectory;
+import box.BoxElement;
+import box.BoxFile;
+import idolondemand.entityextractor.EntitiesExtractor;
+import idolondemand.entityextractor.EntityType;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -10,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import ourapp.TagExtractor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,8 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Daniyar Itegulov
@@ -56,6 +64,7 @@ public class AuthCompleteServlet extends HttpServlet {
                         pw.println(entityString);
                         BoxAccount boxAccount = new BoxAccount(entityString);
                         pw.println(boxAccount);
+                        Set<String> set = TagExtractor.extract(boxAccount);
                     } else {
                         pw.println("Ti che vashe ti che");
                     }
