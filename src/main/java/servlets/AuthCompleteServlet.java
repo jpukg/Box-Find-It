@@ -1,6 +1,9 @@
 package servlets;
 
 import box.BoxAccount;
+import box.BoxDirectory;
+import box.BoxElement;
+import box.BoxFile;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -56,6 +59,14 @@ public class AuthCompleteServlet extends HttpServlet {
                         pw.println(entityString);
                         BoxAccount boxAccount = new BoxAccount(entityString);
                         pw.println(boxAccount);
+                        BoxDirectory boxDirectory = boxAccount.getRoot();
+                        for (BoxElement element : boxDirectory.getElementList()) {
+                            if (element instanceof BoxFile) {
+                                BoxFile file = (BoxFile) element;
+                                byte[] data = boxAccount.getFileContent(file.getId());
+                                pw.println(new String(data));
+                            }
+                        }
                     } else {
                         pw.println("Ti che vashe ti che");
                     }
