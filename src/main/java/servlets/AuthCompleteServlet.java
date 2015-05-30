@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import ourapp.TagExtractor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,19 +64,7 @@ public class AuthCompleteServlet extends HttpServlet {
                         pw.println(entityString);
                         BoxAccount boxAccount = new BoxAccount(entityString);
                         pw.println(boxAccount);
-                        BoxDirectory boxDirectory = boxAccount.getRoot();
-                        for (BoxElement element : boxDirectory.getElementList()) {
-                            if (element instanceof BoxFile) {
-                                BoxFile file = (BoxFile) element;
-                                byte[] data = boxAccount.getFileContent(file.getId());
-                                String string = new String(data, StandardCharsets.UTF_8);
-                                Set<String> tags = EntitiesExtractor.fetchByText(string, EntityType.PEOPLE_ENG,
-                                        EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG);
-                                for (String tag : tags) {
-                                    pw.println(tag);
-                                }
-                            }
-                        }
+                        Set<String> set = TagExtractor.extract(boxAccount);
                     } else {
                         pw.println("Ti che vashe ti che");
                     }
