@@ -71,6 +71,7 @@ public class TagExtractor {
                 result.addAll(extract((BoxDirectory) element, boxAccount));
             }
         }
+        connection.close();
         return result;
     }
 
@@ -86,6 +87,7 @@ public class TagExtractor {
             String tag = rs.getString("tag");
             list.add(tag);
         }
+        connection.close();
         return list;
     }
 }
