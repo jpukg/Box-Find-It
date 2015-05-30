@@ -4,6 +4,8 @@ import box.BoxAccount;
 import box.BoxDirectory;
 import box.BoxElement;
 import box.BoxFile;
+import idolondemand.entityextractor.EntitiesExtractor;
+import idolondemand.entityextractor.EntityType;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,8 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Daniyar Itegulov
@@ -64,7 +68,12 @@ public class AuthCompleteServlet extends HttpServlet {
                             if (element instanceof BoxFile) {
                                 BoxFile file = (BoxFile) element;
                                 byte[] data = boxAccount.getFileContent(file.getId());
-                                pw.println(new String(data));
+                                String string = new String(data, StandardCharsets.UTF_8);
+                                Set<String> tags = EntitiesExtractor.fetchByText(string, EntityType.PEOPLE_ENG,
+                                        EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG);
+                                for (String tag : tags) {
+                                    pw.println(tag);
+                                }
                             }
                         }
                     } else {
