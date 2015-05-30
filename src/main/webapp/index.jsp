@@ -114,13 +114,13 @@
                 $('#tags a').tagcloud();
             });
 
-            function mda() {
-                var parent = document.getElementsByTagName("body")[0];
-                parent.removeChild(parent.getElementById("tags"));
-//                document.write("mda ");
-            }
-
         });
+
+        function mda() {
+            var parent = document.getElementsByTagName("body")[0];
+            parent.removeChild(parent.getElementById("tags"));
+//                document.write("mda ");
+        }
     </script>
 </head>
 <body class="container-fluid">
