@@ -1,5 +1,6 @@
 package idolondemand.textextraction;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import idolondemand.Constants;
@@ -48,8 +49,11 @@ public class TextExtractor {
             }
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
-                JsonObject jsonObject = parser.parse(EntityUtils.toString(responseEntity)).getAsJsonObject();
-                return jsonObject.get("content").getAsString();
+                String string = EntityUtils.toString(responseEntity);
+                System.out.println(string);
+                JsonObject jsonObject = parser.parse(string).getAsJsonObject();
+                JsonArray document = jsonObject.get("document").getAsJsonArray();
+                return document.get(0).getAsJsonObject().get("content").getAsString();
             } else {
                 throw new IllegalStateException("No entity");
             }
