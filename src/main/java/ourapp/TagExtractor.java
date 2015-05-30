@@ -59,7 +59,9 @@ public class TagExtractor {
                     byte[] data = boxAccount.getFileContent(file.getId());
                     File f = Files.createTempFile("hackathonapp", "elitebox").toFile();
                     FileUtils.writeByteArrayToFile(f, data);
-                    String mimeType = new MimetypesFileTypeMap().getContentType(f);
+                    MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
+                    mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+                    String mimeType = mtftp.getContentType(f);
                     System.out.println("Mime type: " + mimeType);
                     String stringData;
                     if (mimeType.startsWith("image/")) {
