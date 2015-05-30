@@ -114,13 +114,22 @@
                 $('#tags a').tagcloud();
             });
 
-            mda = function() {
-                var parent = document.getElementsByTagName("body")[0];
-                parent.removeChild(document.getElementById("tags"));
-                document.write("mda chet");
-            }
-
         });
+
+        function mda() {
+            var body = document.getElementsByTagName("body")[0];
+            var child = document.getElementById("tags");
+            if (child != undefined) {
+                body.removeChild(child);
+//                document.write("mda ");
+            } else {
+                var results = document.createElement("div");
+                results.id = "results";
+                var textNode = document.createTextNode("Hello! I’m a new DIV!");
+                results.appendChild(textNode);
+                body.appendChild(results);
+            }
+        }
     </script>
 </head>
 <body class="container-fluid">
@@ -162,7 +171,7 @@
     }
 %>
 
-<form class="col-lg-12" method="get" onsubmit="mda()">
+<form class="col-lg-12" method="get" onsubmit="mda();">
     <div class="input-group">
         <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
         <input type="hidden" name="entity" value="<%pw.write(entityString);%>">
