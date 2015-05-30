@@ -14,6 +14,7 @@
 <%@ page import="box.BoxAccount" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="ourapp.TagExtractor" %>
+<%@ page import="java.net.URLEncoder" %>
 <!doctype html>
 <html>
 <head>
@@ -184,7 +185,7 @@
         var results = document.createElement("div");
         results.id = "results";
         results.className = "row";
-        $.getJSON("/find?tag=" + s + "&entity=<%pw.write(entityString);%>", function(data) {
+        $.getJSON("/find?tag=" + s + "&entity=<%pw.write(URLEncoder.encode(entityString, "UTF-8"));%>", function(data) {
             $.each(data, function(key, val) {
                 alert(val.name);
             });
