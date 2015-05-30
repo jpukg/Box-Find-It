@@ -52,8 +52,12 @@ public class AuthCompleteServlet extends HttpServlet {
                     HttpResponse response = httpclient.execute(post);
                     HttpEntity entity = response.getEntity();
                     if (entity != null) {
-                        BoxAccount boxAccount = new BoxAccount(EntityUtils.toString(entity));
+                        String entityString = EntityUtils.toString(entity);
+                        pw.println(entityString);
+                        BoxAccount boxAccount = new BoxAccount(entityString);
                         pw.println(boxAccount);
+                    } else {
+                        pw.println("Ti che vashe ti che");
                     }
                 }
             }
