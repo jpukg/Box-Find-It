@@ -23,7 +23,7 @@ public class BoxDirectory implements BoxElement {
     private DateTime createdAt;
     private DateTime modifiedAt;
     private BoxAccount boxAccount;
-    private List<BoxElement> elementList = new ArrayList<>();
+    private List<BoxElement> elementList = new ArrayList<BoxElement>();
 
     public BoxDirectory(JsonObject jsonObject, BoxAccount boxAccount) throws IOException {
         id = jsonObject.get("id").getAsLong();
