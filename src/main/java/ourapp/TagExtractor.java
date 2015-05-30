@@ -25,8 +25,13 @@ import java.util.*;
 public class TagExtractor {
     private static final String INSERT_SQL =  "INSERT INTO tags VALUES(?,?,?)";
 
-    private static Connection getConnection() throws URISyntaxException, SQLException, ClassNotFoundException {
-        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+    private static Connection getConnection() throws SQLException {
+        URI dbUri;
+        try {
+            dbUri = new URI(System.getenv("DATABASE_URL"));
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException("Invalid DATABASE_URL");
+        }
 
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
@@ -44,8 +49,7 @@ public class TagExtractor {
         return extract(boxAccount.getRoot(), boxAccount);
     }
 
-    public static Set<String> extract(BoxDirectory boxDirectory, BoxAccount boxAccount) throws IOException,
-            ClassNotFoundException, SQLException, URISyntaxException {
+    public static Set<String> extract(BoxDirectory boxDirectory, BoxAccount boxAccount) throws IOException, SQLException {
         Set<String> result = new HashSet<>();
         Connection connection = getConnection();
         for (BoxElement element : boxDirectory.getElementList()) {
@@ -87,7 +91,7 @@ public class TagExtractor {
         return result;
     }
 
-    public static Set<String> findMatching(String string) throws ClassNotFoundException, SQLException, URISyntaxException {
+    public static Set<String> findMatching(String string) throws SQLException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag LIKE '%" + string + "%'");
@@ -100,7 +104,7 @@ public class TagExtractor {
         return set;
     }
 
-    public static Set<Long> findFileIds(String tag) throws ClassNotFoundException, SQLException, URISyntaxException {
+    public static Set<Long> findFileIds(String tag) throws SQLException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery("SELECT DISTINCT file_id FROM tags WHERE '" + tag + "' = ANY(tag)");
