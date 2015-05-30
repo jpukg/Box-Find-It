@@ -17,7 +17,8 @@
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
 //                prefetch: '../data/films/post_1960.json',
                 remote: {
-                    url: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json',
+//                    url: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json',
+                    url : '/query.json?query=%QUERY',
                     wildcard: '%QUERY'
                 }
             });
