@@ -12,7 +12,7 @@ public class BoxAccountTest {
     @Test
     public void testList() throws Exception {
         BoxDirectory boxDirectory = new BoxDirectory("{\"type\":\"folder\",\"id\":\"0\",\"sequence_id\":null,\"etag\":null," +
-                "\"name\":\"All Files\",\"created_at\":null,\"modified_at\":null,\"description\":\"\",\"size\":244," +
+                "\"name\":\"All Files\",\"created_at\":\"2015-05-30T03:06:04-07:00\",\"modified_at\":null,\"description\":\"\",\"size\":244," +
                 "\"path_collection\":{\"total_count\":0,\"entries\":[]},\"created_by\":{\"type\":\"user\",\"id\":\"\"," +
                 "\"name\":\"\",\"login\":\"\"},\"modified_by\":{\"type\":\"user\",\"id\":\"238673879\",\"name\":" +
                 "\"Daniyar Itegulov\",\"login\":\"wibkwibk@gmail.com\"},\"trashed_at\":null,\"purged_at\":null," +
