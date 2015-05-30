@@ -14,6 +14,7 @@
 <%@ page import="box.BoxAccount" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="ourapp.TagExtractor" %>
+<%@ page import="java.net.URLEncoder" %>
 <!doctype html>
 <html>
 <head>
@@ -80,64 +81,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
     <script src="https://addywaddy.github.io/jquery.tagcloud.js/jquery.tagcloud.0-0-1.js" type="text/javascript"></script>
-    <script>
-        $(document).ready(function () {
 
-            // remote
-            // ------
-
-            var bestPictures = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-//                prefetch: '../data/films/post_1960.json',
-                remote: {
-//                    url: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json',
-                    url: '/query.json?q=%QUERY',
-                    wildcard: '%QUERY'
-                }
-            });
-
-            $('.typeahead').typeahead({
-                highlight: true
-            }, {
-                name: 'best-pictures',
-                display: 'value',
-                source: bestPictures
-            });
-
-            $.fn.tagcloud.defaults = {
-                size: {start: 14, end: 36, unit: 'pt'},
-                color: {start: '#cde', end: '#f52'}
-            };
-
-            $(function () {
-                $('#tags a').tagcloud();
-            });
-
-        });
-
-        function doSearch() {
-            var body = document.getElementsByTagName("body")[0];
-            var tags = document.getElementById("tags");
-            if (tags != undefined) {
-                body.removeChild(tags);
-            } else {
-                body.removeChild(body.lastChild);
-            }
-            var results = document.createElement("div");
-            results.id = "results";
-            results.className = "row";
-            for (var i = 0; i < 20; i++) {
-                var cell = document.createElement("div");
-                cell.className = "col-md-3";
-                var textNode = document.createTextNode("mda cell " + i);
-                cell.appendChild(textNode);
-                results.appendChild(cell);
-            }
-            body.appendChild(results);
-            return false;
-        }
-    </script>
 </head>
 <body class="container-fluid">
 
@@ -194,5 +138,68 @@
     <a href="/path" rel="5">having fun</a>
 </div>
 
+<script>
+    $(document).ready(function () {
+
+        // remote
+        // ------
+
+        var bestPictures = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+//                prefetch: '../data/films/post_1960.json',
+            remote: {
+//                    url: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json',
+                url: '/query.json?q=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        $('.typeahead').typeahead({
+            highlight: true
+        }, {
+            name: 'best-pictures',
+            display: 'value',
+            source: bestPictures
+        });
+
+        $.fn.tagcloud.defaults = {
+            size: {start: 14, end: 36, unit: 'pt'},
+            color: {start: '#cde', end: '#f52'}
+        };
+
+        $(function () {
+            $('#tags a').tagcloud();
+        });
+
+    });
+
+    function doSearch(s) {
+        var body = document.getElementsByTagName("body")[0];
+        var tags = document.getElementById("tags");
+        if (tags != undefined) {
+            body.removeChild(tags);
+        } else {
+            body.removeChild(body.lastChild);
+        }
+        var results = document.createElement("div");
+        results.id = "results";
+        results.className = "row";
+        $.getJSON("/find?tag=" + s + "&entity=<%pw.write(URLEncoder.encode(entityString, "UTF-8"));%>", function(data) {
+            $.each(data, function(key, val) {
+                alert(val.name);
+            });
+        });
+        for (var i = 0; i < 20; i++) {
+            var cell = document.createElement("div");
+            cell.className = "col-md-3";
+            var textNode = document.createTextNode("mda cell " + i);
+            cell.appendChild(textNode);
+            results.appendChild(cell);
+        }
+        body.appendChild(results);
+        return false;
+    }
+</script>
 </body>
 </html>
