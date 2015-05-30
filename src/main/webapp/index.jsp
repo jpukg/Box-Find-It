@@ -116,7 +116,7 @@
 
         });
 
-        function mda() {
+        function doSearch() {
             var body = document.getElementsByTagName("body")[0];
             var tags = document.getElementById("tags");
             if (tags != undefined) {
@@ -178,7 +178,7 @@
 }
 %>
 
-<form class="col-lg-12" method="get" onsubmit="mda();">
+<form class="col-lg-12" method="get" onsubmit="doSearch(); return false;">
     <div class="input-group">
         <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
       <span class="input-group-btn">
