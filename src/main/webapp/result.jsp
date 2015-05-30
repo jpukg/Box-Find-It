@@ -1,4 +1,7 @@
 <%@ page import="java.io.PrintWriter" %>
+<%@ page import="ourapp.TagExtractor" %>
+<%@ page import="java.util.List" %>
+<%@ page import="box.BoxAccount" %>
 <!doctype html>
 <html>
 <head>
@@ -11,8 +14,15 @@
 <%
     PrintWriter pw = response.getWriter();
     String query = request.getParameter("q");
-    if (query != null) {
-        pw.println("Your query is " + query);
+    String entity = request.getParameter("entity");
+    if (query != null && entity != null) {
+        final BoxAccount account = new BoxAccount(entity);
+        final List<Long> fileIds = TagExtractor.findFileIds(query);
+        for (Long fileId : fileIds) {
+//            BoxAccount.
+        }
+    } else {
+        pw.write("Invalid query.");
     }
 %>
 </body>
