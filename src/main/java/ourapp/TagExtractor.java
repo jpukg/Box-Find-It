@@ -77,12 +77,14 @@ public class TagExtractor {
     public static List<String> findMatching(String string) throws ClassNotFoundException, SQLException, URISyntaxException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT tag FROM tags WHERE ANY(tag) LIKE '%" + string + "%'");
+        ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag LIKE '%" + string + "%'");
         List<String> list = new ArrayList<>();
         while (rs.next()) {
-            Array array = rs.getArray("tag");
-            String[] tags = (String[]) array.getArray();
-            Collections.addAll(list, tags);
+            //Array array = rs.getArray("tag");
+            //String[] tags = (String[]) array.getArray();
+            //Collections.addAll(list, tags);
+            String tag = rs.getString("tag");
+            list.add(tag);
         }
         return list;
     }
