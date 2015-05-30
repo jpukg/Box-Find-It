@@ -33,7 +33,7 @@ public class JsonServlet extends HttpServlet {
         Set<String> tags;
         try {
             tags = TagExtractor.findMatching(query);
-        } catch (ClassNotFoundException | SQLException | URISyntaxException e) {
+        } catch (SQLException | URISyntaxException e) {
             e.printStackTrace();
             return;
         }

@@ -34,12 +34,23 @@ public class BoxListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tag = req.getParameter("tag");
         String entity = req.getParameter("entity");
+        if (tag == null) {
+            try (PrintWriter pw = resp.getWriter()) {
+                pw.println("Tag must be specified");
+            }
+            return;
+        } else if (entity == null) {
+            try (PrintWriter pw = resp.getWriter()) {
+                pw.println("Entity must be specified");
+            }
+            return;
+        }
         BoxAccount boxAccount = new BoxAccount(entity);
         System.out.println("Let's find " + tag + " in " + boxAccount);
         Set<Long> set;
         try {
             set = TagExtractor.findFileIds(tag);
-        } catch (ClassNotFoundException | SQLException | URISyntaxException e) {
+        } catch (SQLException | URISyntaxException e) {
             e.printStackTrace();
             return;
         }
