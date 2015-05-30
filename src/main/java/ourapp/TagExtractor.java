@@ -18,7 +18,7 @@ import java.util.*;
  * @author Daniyar Itegulov
  */
 public class TagExtractor {
-    private static final String INSERT_SQL =  "insert into tags values(?,?,?)";
+    private static final String INSERT_SQL =  "INSERT INTO tags VALUES(?,?,?)";
 
     private static Connection getConnection() throws URISyntaxException, SQLException, ClassNotFoundException {
         URI dbUri = new URI(System.getenv("DATABASE_URL"));
@@ -81,11 +81,21 @@ public class TagExtractor {
         ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag LIKE '%" + string + "%'");
         List<String> list = new ArrayList<>();
         while (rs.next()) {
-            //Array array = rs.getArray("tag");
-            //String[] tags = (String[]) array.getArray();
-            //Collections.addAll(list, tags);
             String tag = rs.getString("tag");
             list.add(tag);
+        }
+        connection.close();
+        return list;
+    }
+
+    public static List<Long> findFileIds(String tag) throws ClassNotFoundException, SQLException, URISyntaxException {
+        Connection connection = getConnection();
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT DISTINCT file_id FROM tags WHERE '" + tag + "' = ANY(tag)");
+        List<Long> list = new ArrayList<>();
+        while (rs.next()) {
+            long id = rs.getLong("file_id");
+            list.add(id);
         }
         connection.close();
         return list;
