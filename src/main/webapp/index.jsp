@@ -155,9 +155,9 @@
     }
 %>
 
-<form class="col-lg-12">
+<form class="col-lg-12" method="get" action="result.jsp">
     <div class="input-group">
-        <input type="text" class="form-control typeahead" placeholder="Search for...">
+        <input type="text" class="form-control typeahead" name="q" placeholder="Search for...">
       <span class="input-group-btn">
         <button class="btn btn-default" type="submit">Go!</button>
       </span>

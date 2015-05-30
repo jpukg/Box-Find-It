@@ -1,3 +1,4 @@
+<%@ page import="java.io.PrintWriter" %>
 <!doctype html>
 <html>
 <head>
@@ -7,5 +8,12 @@
 </head>
 <body>
 <h1>Hello!</h1>
+<%
+    PrintWriter pw = response.getWriter();
+    String query = request.getParameter("q");
+    if (query != null) {
+        pw.println("Your query is " + query);
+    }
+%>
 </body>
 </html>
