@@ -27,7 +27,7 @@ public class BoxAccount {
         JsonObject jsonObject = parser.parse(json).getAsJsonObject();
         accessToken = jsonObject.get("access_token").getAsString();
         refreshToken = jsonObject.get("refresh_token").getAsString();
-        root = BoxParser.parse(list(0));
+        root = BoxParser.parse(list(0), this);
     }
 
     public String list(long folderId) throws IOException {
