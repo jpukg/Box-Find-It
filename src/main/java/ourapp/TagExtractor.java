@@ -59,12 +59,13 @@ public class TagExtractor {
                     byte[] data = boxAccount.getFileContent(file.getId());
                     File f = Files.createTempFile("hackathonapp", "elitebox").toFile();
                     FileUtils.writeByteArrayToFile(f, data);
-                    MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
-                    mtftp.addMimeTypes("image png tif jpg jpeg bmp");
-                    String mimeType = mtftp.getContentType(f);
-                    System.out.println("Mime type: " + mimeType);
                     String stringData;
-                    if (mimeType.startsWith("image/")) {
+                    if (f.getName().endsWith(".jpg") ||
+                            f.getName().endsWith(".jpeg") ||
+                            f.getName().endsWith(".gif") ||
+                            f.getName().endsWith(".png") ||
+                            f.getName().endsWith(".bmp") ||
+                            f.getName().endsWith(".tiff")) {
                         System.out.println("It's an image");
                         stringData = OCRDocument.fetchByFile(f);
                     } else {
