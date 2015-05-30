@@ -6,10 +6,15 @@ import box.BoxElement;
 import box.BoxFile;
 import idolondemand.entityextractor.EntitiesExtractor;
 import idolondemand.entityextractor.EntityType;
+import idolondemand.textextraction.TextExtractor;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -50,8 +55,11 @@ public class TagExtractor {
                 ResultSet rs = stmt.executeQuery("SELECT loaded, tag FROM tags WHERE file_id = " + file.getId());
                 if (!rs.next()) {
                     byte[] data = boxAccount.getFileContent(file.getId());
-                    String string = new String(data);
-                    Set<String> tags = EntitiesExtractor.fetchByText(string, EntityType.PEOPLE_ENG,
+                    File f = Files.createTempFile("hackathonapp", "elitebox").toFile();
+                    FileUtils.writeByteArrayToFile(f, data);
+                    String stringData = TextExtractor.fetchByFile(f);
+                    FileUtils.writeStringToFile(f, stringData);
+                    Set<String> tags = EntitiesExtractor.fetchByFile(f, EntityType.PEOPLE_ENG,
                             EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG);
                     result.addAll(tags);
                     String[] array = new String[tags.size()];
