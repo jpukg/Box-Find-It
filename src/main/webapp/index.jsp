@@ -160,9 +160,9 @@
 
 <form class="col-lg-12" method="get" onsubmit="doSearch($('#q').val()); return false;">
     <div class="input-group">
-        <input type="text" class="form-control typeahead" id="q" placeholder="Search for...">
+        <input type="text" class="form-control typeahead input-lg" id="q" placeholder="Search for...">
       <span class="input-group-btn">
-        <input class="btn btn-default" type="submit" value="Go!">
+        <input class="btn btn-default input-lg" type="submit" value="Go!">
       </span>
     </div>
 </form>
@@ -184,7 +184,7 @@
         }
         Collections.shuffle(list);
         for(Map.Entry<String, Integer> entry : list) {
-            out.write(String.format("<a onclick='doSearch(%s);' rel='%d'>%s</a>", entry.getKey(), entry.getValue(), entry.getKey()));
+            out.write(String.format("<a onclick='doSearch(\"%s\");' rel='%d'>%s </a>", entry.getKey(), entry.getValue(), entry.getKey()));
         }
     %>
 </div>
