@@ -120,6 +120,7 @@
 <%
     String entityString = "";
     Map<String, Integer> map = null;
+    long id = -1;
     PrintWriter pw = response.getWriter();
     if (request.getAttribute("error") != null) {
         pw.println("Something went wrong, sorry");
@@ -142,7 +143,7 @@
             if (entity != null) {
                 entityString = EntityUtils.toString(entity);
                 BoxAccount boxAccount = new BoxAccount(entityString);
-                long id = BoxUserInfo.getUserId(boxAccount);
+                id = BoxUserInfo.getUserId(boxAccount);
                 try {
                     map = TagExtractor.extract(boxAccount, id);
                     System.out.println(map);
@@ -202,7 +203,7 @@
 //                prefetch: '../data/films/post_1960.json',
             remote: {
 //                    url: 'http://twitter.github.io/typeahead.js/data/films/queries/%QUERY.json',
-                url: '/query.json?q=%QUERY',
+                url: '/query.json?q=%QUERY&id=<%out.print(id);%>',
                 wildcard: '%QUERY'
             }
         });
@@ -241,7 +242,7 @@
         spinner.id = "spinner";
         spinner.src = "spinner.gif";
         body.appendChild(spinner);
-        $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
+        $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>" + "&id=<% out.print(id); %>", function(data) {
             body.removeChild(spinner);
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
