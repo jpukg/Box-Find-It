@@ -1,9 +1,6 @@
 package servlets;
 
-import box.BoxAccount;
-import box.BoxDirectory;
-import box.BoxElement;
-import box.BoxFile;
+import box.*;
 import ourapp.TagExtractor;
 
 import javax.json.Json;
@@ -57,13 +54,13 @@ public class BoxListServlet extends HttpServlet {
         try (OutputStream os = resp.getOutputStream()) {
             try (final JsonGenerator generator = Json.createGenerator(os)) {
                 generator.writeStartArray();
-                query(generator, boxAccount.getRoot(), set);
+                query(generator, boxAccount.getRoot(), boxAccount, set);
                 generator.writeEnd();
             }
         }
     }
 
-    private void query(JsonGenerator generator, BoxDirectory boxDirectory, Set<Long> set) {
+    private void query(JsonGenerator generator, BoxDirectory boxDirectory, BoxAccount boxAccount, Set<Long> set) throws IOException {
         for (int i = 0; i < boxDirectory.getElementList().size(); i++) {
             BoxElement element = boxDirectory.getElementList().get(i);
             if (element instanceof BoxFile) {
@@ -71,11 +68,11 @@ public class BoxListServlet extends HttpServlet {
                 if (set.contains(file.getId())) {
                     generator.writeStartObject();
                     generator.write("name", file.getName());
-                    generator.write("preview", URL);
+                    generator.write("preview", BoxPreview.getThumbnail(file.getId(), boxAccount));
                     generator.writeEnd();
                 }
             } else {
-                query(generator, (BoxDirectory) element, set);
+                query(generator, (BoxDirectory) element, boxAccount, set);
             }
         }
     }
