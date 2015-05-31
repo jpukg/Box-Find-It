@@ -15,10 +15,11 @@ import java.util.Base64;
  * @author Daniyar Itegulov
  */
 public class BoxPreview {
-    private static final String THUMBNAIL_URL = "/files/%d/thumbnail.extension";
+    private static final String THUMBNAIL_URL = "https://api.box.com/2.0/files/%d/thumbnail.png?min_height=256&min_width=256";
     private static final Base64.Encoder encoder = Base64.getEncoder();
     public static String getThumbnail(long fileId, BoxAccount boxAccount) throws IOException {
         HttpGet request = new HttpGet(String.format(THUMBNAIL_URL, fileId));
+        System.out.println("Get thumbnail by " + boxAccount);
         request.addHeader("Authorization", "Bearer " + boxAccount.accessToken);
         HttpClient httpclient = HttpClientBuilder.create().build();
         try (CloseableHttpResponse response = (CloseableHttpResponse) httpclient.execute(request)) {
