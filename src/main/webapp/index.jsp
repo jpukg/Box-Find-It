@@ -195,10 +195,15 @@
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
-                cell.className = "col-md-3 preview";
-                cell.style.backgroundImage = "url('" + val.preview + "')";
+                var innerDiv = document.createEvent("div");
+                cell.className = "col-md-3";
+                innerDiv.style.backgroundImage = "url('" + val.preview + "')";
+                innerDiv.className = "preview";
                 var textNode = document.createTextNode(val.name);
-                cell.appendChild(textNode);
+                textNode.style.position = "absolute";
+                textNode.style.bottom = "0";
+                innerDiv.appendChild(textNode);
+                cell.appendChild(innerDiv);
                 results.appendChild(cell);
             });
         });
