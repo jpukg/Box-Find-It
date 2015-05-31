@@ -204,7 +204,11 @@
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
                 var textDiv = document.createElement("div");
-                var textNode = document.createTextNode(val.name);
+                var s = val.name;
+                if (var.length > 25) {
+                    s = s.substr(0, 25) + "...";
+                }
+                var textNode = document.createTextNode(s);
                 textDiv.style.position = "absolute";
                 textDiv.style.bottom = "5px";
                 textDiv.appendChild(textNode);
