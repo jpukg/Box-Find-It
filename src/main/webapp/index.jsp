@@ -199,10 +199,12 @@
                 cell.className = "col-md-3";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
+                var span = document.createElement("span");
                 var textNode = document.createTextNode(val.name);
-                textNode.style.position = "absolute";
-                textNode.style.bottom = "0";
-                innerDiv.appendChild(textNode);
+                span.style.position = "absolute";
+                span.style.bottom = "0";
+                span.appendChild(textNode);
+                innerDiv.appendChild(span);
                 cell.appendChild(innerDiv);
                 results.appendChild(cell);
             });
