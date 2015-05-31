@@ -68,7 +68,9 @@ public class TagExtractor {
                     }
                     FileUtils.writeStringToFile(f, stringData);
                     Set<String> tags = EntitiesExtractor.fetchByFile(f, EntityType.PEOPLE_ENG,
-                            EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG);
+                            EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG, EntityType.ORGANIZATIONS,
+                            EntityType.BANKACCOUNT, EntityType.DATE, EntityType.INTERNET, EntityType.NUMBER_PHONES,
+                            EntityType.UNIVERSITY);
                     result.addAll(tags);
                     String[] array = new String[tags.size()];
                     tags.toArray(array);
