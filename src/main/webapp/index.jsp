@@ -185,11 +185,12 @@
         var results = document.createElement("div");
         results.id = "results";
         results.className = "row";
-        $.getJSON("/find?tag=" + s + "&entity=<%= URLEncoder.encode(entityString, "UTF-8") + "Mda na samom dele chet"%>", function(data) {
+        $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8") + "Mda na samom dele chet"); %>", function(data) {
             $.each(data, function(key, val) {
                 document.alert(val.name);
             });
         });
+        //mda comment
         for (var i = 0; i < 20; i++) {
             var cell = document.createElement("div");
             cell.className = "col-md-3";
