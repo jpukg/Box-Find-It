@@ -15,6 +15,7 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="ourapp.TagExtractor" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="ourapp.Constants" %>
 <!doctype html>
 <html>
 <head>
@@ -100,7 +101,7 @@
         String code = request.getParameter("code");
         String state = request.getParameter("state");
         pw.println("Mda chet");
-        if (!state.equals("kudah")) {
+        if (!state.equals(Constants.SECURE_STATE)) {
             pw.println("Malformed request, sorry");
         } else {
             HttpClient httpclient = HttpClients.createDefault();
