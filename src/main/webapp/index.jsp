@@ -226,7 +226,7 @@
         results.className = "row";
         var spinner = document.createElement("img");
         spinner.id = "spinner";
-        spinner.src = "spinner.gif"
+        spinner.src = "spinner.gif";
         body.appendChild(spinner);
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
             body.removeChild(spinner);
