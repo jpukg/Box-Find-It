@@ -176,7 +176,7 @@
         };
 
         $(function () {
-            $('#tags a').tagcloud();
+            $('#tags').find('a').tagcloud();
         });
 
     });
@@ -196,9 +196,7 @@
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
                 cell.className = "col-md-3 preview";
-                var img = document.createElement("img");
-                img.src = val.preview;
-                cell.appendChild(img);
+                cell.style.backgroundImage = "url('" + val.preview + "')";
                 var textNode = document.createTextNode(val.name);
                 cell.appendChild(textNode);
                 results.appendChild(cell);
