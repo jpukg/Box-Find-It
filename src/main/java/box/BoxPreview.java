@@ -1,5 +1,6 @@
 package box;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
@@ -26,16 +27,21 @@ public class BoxPreview {
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
             System.out.println("getThumbnail: " + statusLine);
-            if (statusLine.getStatusCode() != 200) {
-                System.out.println("Tried to get content of " + fileId + ", but something got wrong");
-                System.out.println("getThumbnail: " + EntityUtils.toString(entity));
-                throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
-            }
-            if (entity != null) {
-                byte[] data = EntityUtils.toByteArray(entity);
-                return "data:image/png;base64," + encoder.encodeToString(data);
+            if (statusLine.getStatusCode() == 200) {
+                if (entity != null) {
+                    byte[] data = EntityUtils.toByteArray(entity);
+                    return "data:image/png;base64," + encoder.encodeToString(data);
+                } else {
+                    throw new IllegalStateException("No entity");
+                }
+            } else if (statusLine.getStatusCode() == 202) {
+                Header location = response.getFirstHeader("Location");
+                System.out.println("Get thumbnail: " + location);
+                return location.getValue();
             } else {
-                throw new IllegalStateException("No entity");
+                    System.out.println("Tried to get content of " + fileId + ", but something got wrong");
+                    System.out.println("getThumbnail: " + EntityUtils.toString(entity));
+                    throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
         }
     }

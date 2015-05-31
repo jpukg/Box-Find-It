@@ -96,7 +96,7 @@ public class TagExtractor {
     public static Set<String> findMatching(String string) throws SQLException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag LIKE '%" + string + "%'");
+        ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag ILIKE '%" + string + "%'");
         Set<String> set = new HashSet<>();
         while (rs.next()) {
             String tag = rs.getString("tag");
