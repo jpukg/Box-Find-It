@@ -12,7 +12,6 @@
 <%@ page import="org.apache.http.HttpEntity" %>
 <%@ page import="org.apache.http.util.EntityUtils" %>
 <%@ page import="box.BoxAccount" %>
-<%@ page import="java.util.Set" %>
 <%@ page import="ourapp.TagExtractor" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="ourapp.Constants" %>
@@ -214,9 +213,8 @@
                     s = s.substr(0, 25) + "...";
                 }
                 var textNode = document.createTextNode(s);
-                textDiv.style.position = "absolute";
-                textDiv.style.bottom = "5px";
-                textDiv.style.boxShadow = "inset -6px -200px 56px -150px rgba(0,0,0,0.75);"
+                textDiv.style.marginTop = "230px";
+                innerDiv.style.boxShadow = "inset -6px -200px 56px -150px rgba(0,0,0,0.75);";
                 textDiv.appendChild(textNode);
                 innerDiv.appendChild(textDiv);
                 cell.appendChild(innerDiv);
