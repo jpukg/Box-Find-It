@@ -187,7 +187,7 @@
         results.className = "row";
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
             $.each(data, function(key, val) {
-                document.alert(val.name);
+                alert(val.name);
             });
         });
         for (var i = 0; i < 20; i++) {
