@@ -217,9 +217,9 @@
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
                 var innerDiv = document.createElement("div");
-                innerDiv.onclick(function() {
+                innerDiv.onclick = function() {
                     window.open(val.link, "_blank");
-                });
+                };
                 cell.className = "col-md-3";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
