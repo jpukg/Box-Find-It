@@ -177,7 +177,7 @@
                 return o2.getValue() - o1.getValue();
             }
         });
-        int len = Math.max(30, entries.length);
+        int len = Math.min(30, entries.length);
         ArrayList<Map.Entry<String, Integer>> list = new ArrayList(len);
         for (int i = 0; i < len; i++) {
             list.add(entries[i]);
