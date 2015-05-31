@@ -3,8 +3,6 @@
 <%@ page import="org.apache.http.impl.client.HttpClients" %>
 <%@ page import="org.apache.http.client.methods.HttpPost" %>
 <%@ page import="org.apache.http.NameValuePair" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="org.apache.http.message.BasicNameValuePair" %>
 <%@ page import="servlets.BoxApiConstants" %>
 <%@ page import="org.apache.http.client.entity.UrlEncodedFormEntity" %>
@@ -17,7 +15,7 @@
 <%@ page import="ourapp.Constants" %>
 <%@ page import="java.net.URISyntaxException" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.*" %>
 <!doctype html>
 <html>
 <head>
@@ -109,19 +107,18 @@
         }
 
         #spinner {
+            display: block;
             margin: auto;
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
-    <script src="https://addywaddy.github.io/jquery.tagcloud.js/jquery.tagcloud.0-0-1.js" type="text/javascript"></script>
 
 </head>
 <body class="container-fluid">
 
 <%
     String entityString = "";
+    Map<String, Integer> map = null;
     PrintWriter pw = response.getWriter();
     if (request.getAttribute("error") != null) {
         pw.println("Something went wrong, sorry");
@@ -145,7 +142,7 @@
                 entityString = EntityUtils.toString(entity);
                 BoxAccount boxAccount = new BoxAccount(entityString);
                 try {
-                    Map<String, Integer> map = TagExtractor.extract(boxAccount);
+                    map = TagExtractor.extract(boxAccount);
                     System.out.println(map);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
@@ -171,17 +168,31 @@
 </form>
 
 <div id="tags">
-    <a href="/path" rel="7">peace</a>
-    <a href="/path" rel="3">unity</a>
-    <a href="/path" rel="10">love</a>
-    <a href="/path" rel="5">having fun</a>
+    <%
+        final Map.Entry<String, Integer>[] entries = new Map.Entry[map.entrySet().size()];
+        map.entrySet().toArray(entries);
+        Arrays.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue() - o1.getValue();
+            }
+        });
+        int len = Math.max(30, entries.length);
+        ArrayList<Map.Entry<String, Integer>> list = new ArrayList(len);
+        for (int i = 0; i < len; i++) {
+            list.add(entries[i]);
+        }
+        Collections.shuffle(list);
+        for(Map.Entry<String, Integer> entry : list) {
+            out.write(String.format("<a onclick='doSearch(%s);' rel='%d'>%s</a>", entry.getKey(), entry.getKey(), entry.getValue()));
+        }
+    %>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+<script src="https://addywaddy.github.io/jquery.tagcloud.js/jquery.tagcloud.0-0-1.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
-
-        // remote
-        // ------
 
         var bestPictures = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
