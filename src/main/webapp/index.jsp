@@ -79,9 +79,13 @@
         }
 
         .preview {
-            width: 256px;
+            width: 242px;
             height: 256px;
             vertical-align: bottom;
+        }
+
+        .preview {
+            text-align: center;
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -199,12 +203,12 @@
                 cell.className = "col-md-3";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
-                var span = document.createElement("span");
+                var textDiv = document.createElement("div");
                 var textNode = document.createTextNode(val.name);
-                span.style.position = "absolute";
-                span.style.bottom = "0";
-                span.appendChild(textNode);
-                innerDiv.appendChild(span);
+                textDiv.style.position = "absolute";
+                textDiv.style.bottom = "5px";
+                textDiv.appendChild(textNode);
+                innerDiv.appendChild(textDiv);
                 cell.appendChild(innerDiv);
                 results.appendChild(cell);
             });
