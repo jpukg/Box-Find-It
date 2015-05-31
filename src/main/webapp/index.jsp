@@ -95,11 +95,20 @@
         }
 
         .preview:hover {
-            box-shadow: inset -6px -200px 56px -190px rgba(0,0,0,0.75);
+            box-shadow: inset -6px -200px 55px -190px rgba(0,0,0,0.75);
+            cursor: pointer;
         }
 
         .preview:hover .textDiv {
             display: inline-block;
+        }
+
+        .input-group {
+            margin: 20px auto;
+        }
+
+        #spinner {
+            margin: auto;
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -213,7 +222,12 @@
         var results = document.createElement("div");
         results.id = "results";
         results.className = "row";
+        var spinner = document.createElement("img");
+        spinner.id = "spinner";
+        spinner.src = "spinner.gif"
+        body.appendChild(spinner);
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
+            body.removeChild(spinner);
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
                 var innerDiv = document.createElement("div");
