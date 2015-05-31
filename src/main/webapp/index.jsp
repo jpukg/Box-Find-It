@@ -195,7 +195,7 @@
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
-                var innerDiv = document.createEvent("div");
+                var innerDiv = document.createElement("div");
                 cell.className = "col-md-3";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
