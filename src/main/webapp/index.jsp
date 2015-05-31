@@ -16,6 +16,8 @@
 <%@ page import="ourapp.TagExtractor" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="ourapp.Constants" %>
+<%@ page import="java.net.URISyntaxException" %>
+<%@ page import="java.sql.SQLException" %>
 <!doctype html>
 <html>
 <head>
@@ -98,13 +100,12 @@
 
 <%
     String entityString = "";
-    PrintWriter pw = response.getWriter(); {
+    PrintWriter pw = response.getWriter();
     if (request.getAttribute("error") != null) {
         pw.println("Something went wrong, sorry");
     } else {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-        pw.println("Mda chet");
         if (!state.equals(Constants.SECURE_STATE)) {
             pw.println("Malformed request, sorry");
         } else {
@@ -120,17 +121,21 @@
             HttpEntity entity = resp.getEntity();
             if (entity != null) {
                 entityString = EntityUtils.toString(entity);
-                pw.println(entityString);
                 BoxAccount boxAccount = new BoxAccount(entityString);
-                pw.println(boxAccount);
-                Set<String> set = TagExtractor.extract(boxAccount);
-                pw.println(set);
+                try {
+                    TagExtractor.extract(boxAccount);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             } else {
-                pw.println("Ti che vashe ti che");
+                pw.println("Couldn't connect to server");
             }
         }
     }
-}
 %>
 
 <form class="col-lg-12" method="get" onsubmit="doSearch($('#q').val()); return false;">
