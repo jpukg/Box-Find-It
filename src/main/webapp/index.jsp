@@ -77,6 +77,12 @@
         .input-group .twitter-typeahead .form-control:not(:first-child):not(:last-child) {
             border-radius: 4px 0 0 4px;
         }
+
+        .preview {
+            width: 256px;
+            height: 256px;
+            vertical-align: bottom;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -170,7 +176,7 @@
         };
 
         $(function () {
-            $('#tags a').tagcloud();
+            $('#tags').find('a').tagcloud();
         });
 
     });
@@ -188,16 +194,21 @@
         results.className = "row";
         $.getJSON("/find?tag=" + s + "&entity=<% out.write(URLEncoder.encode(entityString, "UTF-8")); %>", function(data) {
             $.each(data, function(key, val) {
-                alert(val.name);
+                var cell = document.createElement("div");
+                var innerDiv = document.createElement("div");
+                cell.className = "col-md-3";
+                innerDiv.style.backgroundImage = "url('" + val.preview + "')";
+                innerDiv.className = "preview";
+                var span = document.createElement("span");
+                var textNode = document.createTextNode(val.name);
+                span.style.position = "absolute";
+                span.style.bottom = "0";
+                span.appendChild(textNode);
+                innerDiv.appendChild(span);
+                cell.appendChild(innerDiv);
+                results.appendChild(cell);
             });
         });
-        for (var i = 0; i < 20; i++) {
-            var cell = document.createElement("div");
-            cell.className = "col-md-3";
-            var textNode = document.createTextNode("mda cell " + i);
-            cell.appendChild(textNode);
-            results.appendChild(cell);
-        }
         body.appendChild(results);
         return false;
     }
