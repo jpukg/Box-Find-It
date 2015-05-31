@@ -88,6 +88,18 @@
         .preview {
             text-align: center;
         }
+
+        .preview .textDiv {
+            display: none;
+        }
+
+        .preview:hover {
+            box-shadow: inset -6px -200px 56px -190px rgba(0,0,0,0.75);
+        }
+
+        .preview:hover .textDiv {
+            display: inline-block;
+        }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -208,13 +220,13 @@
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
                 var textDiv = document.createElement("div");
+                textDiv.className = "textDiv";
                 var s = val.name;
                 if (s.length > 25) {
                     s = s.substr(0, 25) + "...";
                 }
                 var textNode = document.createTextNode(s);
                 innerDiv.style.paddingTop = "230px";
-                innerDiv.style.boxShadow = "inset -6px -200px 56px -150px rgba(0,0,0,0.75);";
                 textDiv.appendChild(textNode);
                 innerDiv.appendChild(textDiv);
                 cell.appendChild(innerDiv);
