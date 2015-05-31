@@ -17,7 +17,7 @@
 <%@ page import="ourapp.Constants" %>
 <%@ page import="java.net.URISyntaxException" %>
 <%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Map" %>
 <!doctype html>
 <html>
 <head>
@@ -136,8 +136,8 @@
                 entityString = EntityUtils.toString(entity);
                 BoxAccount boxAccount = new BoxAccount(entityString);
                 try {
-                    Set<String> set = TagExtractor.extract(boxAccount);
-                    System.out.println(set);
+                    Map<String, Integer> map = TagExtractor.extract(boxAccount);
+                    System.out.println(map);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 } catch (SQLException e) {

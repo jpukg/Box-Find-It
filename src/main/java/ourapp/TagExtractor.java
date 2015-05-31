@@ -44,13 +44,13 @@ public class TagExtractor {
 
 
 
-    public static Set<String> extract(BoxAccount boxAccount) throws IOException,
+    public static Map<String, Integer> extract(BoxAccount boxAccount) throws IOException,
             URISyntaxException, SQLException, ClassNotFoundException {
         return extract(boxAccount.getRoot(), boxAccount);
     }
 
-    public static Set<String> extract(BoxDirectory boxDirectory, BoxAccount boxAccount) throws IOException, SQLException {
-        Set<String> result = new HashSet<>();
+    public static Map<String, Integer> extract(BoxDirectory boxDirectory, BoxAccount boxAccount) throws IOException, SQLException {
+        Map<String, Integer> result = new HashMap<>();
         Connection connection = getConnection();
         for (BoxElement element : boxDirectory.getElementList()) {
             if (element instanceof BoxFile) {
@@ -71,7 +71,10 @@ public class TagExtractor {
                             EntityType.COMPAINES_ENG, EntityType.COMPAINES_ENG, EntityType.ORGANIZATIONS,
                             EntityType.BANKACCOUNT, EntityType.DATE, EntityType.INTERNET, EntityType.NUMBER_PHONES,
                             EntityType.UNIVERSITY);
-                    result.addAll(tags);
+                    for (String tag : tags) {
+                        result.putIfAbsent(tag, 0);
+                        result.put(tag, result.get(tag) + 1);
+                    }
                     String[] array = new String[tags.size()];
                     tags.toArray(array);
                     PreparedStatement ps = connection.prepareStatement(INSERT_SQL);
@@ -83,10 +86,17 @@ public class TagExtractor {
                     Date date = rs.getDate("loaded");
                     Array array = rs.getArray("tag");
                     String[] tags = (String[]) array.getArray();
-                    Collections.addAll(result, tags);
+                    for (String tag : tags) {
+                        result.putIfAbsent(tag, 0);
+                        result.put(tag, result.get(tag) + 1);
+                    }
                 }
             } else {
-                result.addAll(extract((BoxDirectory) element, boxAccount));
+                Map<String, Integer> tags = extract((BoxDirectory) element, boxAccount);
+                for (Map.Entry<String, Integer> tag : tags.entrySet()) {
+                    result.putIfAbsent(tag.getKey(), 0);
+                    result.put(tag.getKey(), result.get(tag.getKey()) + tag.getValue());
+                }
             }
         }
         connection.close();
