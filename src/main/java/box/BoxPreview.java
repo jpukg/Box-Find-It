@@ -33,9 +33,7 @@ public class BoxPreview {
             }
             if (entity != null) {
                 byte[] data = EntityUtils.toByteArray(entity);
-                String result = "data:image/png;base64," + encoder.encodeToString(data);
-                System.out.println("getThumbnail: GOT " + result);
-                return result;
+                return "data:image/png;base64," + encoder.encodeToString(data);
             } else {
                 throw new IllegalStateException("No entity");
             }
