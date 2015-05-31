@@ -30,9 +30,10 @@ public class JsonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String query = req.getParameter("q");
+        long id = Long.parseLong(req.getParameter("id"));
         Set<String> tags;
         try {
-            tags = TagExtractor.findMatching(query);
+            tags = TagExtractor.findMatching(query, id);
         } catch (SQLException e) {
             e.printStackTrace();
             return;

@@ -31,6 +31,7 @@ public class BoxListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tag = req.getParameter("tag");
         String entity = req.getParameter("entity");
+        long id = Long.parseLong(req.getParameter("id"));
         if (tag == null) {
             try (PrintWriter pw = resp.getWriter()) {
                 pw.println("Tag must be specified");
@@ -46,7 +47,7 @@ public class BoxListServlet extends HttpServlet {
         System.out.println("Let's find " + tag + " in " + boxAccount);
         Set<Long> set;
         try {
-            set = TagExtractor.findFileIds(tag);
+            set = TagExtractor.findFileIds(tag, id);
         } catch (SQLException  e) {
             e.printStackTrace();
             return;

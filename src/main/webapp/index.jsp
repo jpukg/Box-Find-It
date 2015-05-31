@@ -16,6 +16,7 @@
 <%@ page import="java.net.URISyntaxException" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.*" %>
+<%@ page import="box.BoxUserInfo" %>
 <!doctype html>
 <html>
 <head>
@@ -141,8 +142,9 @@
             if (entity != null) {
                 entityString = EntityUtils.toString(entity);
                 BoxAccount boxAccount = new BoxAccount(entityString);
+                long id = BoxUserInfo.getUserId(boxAccount);
                 try {
-                    map = TagExtractor.extract(boxAccount);
+                    map = TagExtractor.extract(boxAccount, id);
                     System.out.println(map);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();

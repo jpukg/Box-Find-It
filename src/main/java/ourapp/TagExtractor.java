@@ -23,7 +23,7 @@ import java.util.*;
  * @author Daniyar Itegulov
  */
 public class TagExtractor {
-    private static final String INSERT_SQL =  "INSERT INTO tags VALUES(?,?,?)";
+    private static final String INSERT_SQL =  "INSERT INTO tags VALUES(?,?,?,?)";
 
     private static Connection getConnection() throws SQLException {
         URI dbUri;
@@ -44,12 +44,12 @@ public class TagExtractor {
 
 
 
-    public static Map<String, Integer> extract(BoxAccount boxAccount) throws IOException,
+    public static Map<String, Integer> extract(BoxAccount boxAccount, long userId) throws IOException,
             URISyntaxException, SQLException, ClassNotFoundException {
-        return extract(boxAccount.getRoot(), boxAccount);
+        return extract(boxAccount.getRoot(), boxAccount, userId);
     }
 
-    public static Map<String, Integer> extract(BoxDirectory boxDirectory, BoxAccount boxAccount) throws IOException, SQLException {
+    public static Map<String, Integer> extract(BoxDirectory boxDirectory, BoxAccount boxAccount, long userId) throws IOException, SQLException {
         Map<String, Integer> result = new HashMap<>();
         Connection connection = getConnection();
         for (BoxElement element : boxDirectory.getElementList()) {
@@ -81,6 +81,7 @@ public class TagExtractor {
                     ps.setLong(1, file.getId());
                     ps.setDate(2, new Date(file.getModifiedAt().toDate().getTime()));
                     ps.setArray(3, connection.createArrayOf("text", array));
+                    ps.setLong(4, userId);
                     ps.executeUpdate();
                 } else {
                     Date date = rs.getDate("loaded");
@@ -92,7 +93,7 @@ public class TagExtractor {
                     }
                 }
             } else {
-                Map<String, Integer> tags = extract((BoxDirectory) element, boxAccount);
+                Map<String, Integer> tags = extract((BoxDirectory) element, boxAccount, userId);
                 for (Map.Entry<String, Integer> tag : tags.entrySet()) {
                     result.putIfAbsent(tag.getKey(), 0);
                     result.put(tag.getKey(), result.get(tag.getKey()) + tag.getValue());
@@ -103,10 +104,10 @@ public class TagExtractor {
         return result;
     }
 
-    public static Set<String> findMatching(String string) throws SQLException {
+    public static Set<String> findMatching(String string, long userId) throws SQLException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT unnest(tag) tag FROM tags) x WHERE tag ILIKE '%" + string + "%'");
+        ResultSet rs = st.executeQuery("SELECT tag FROM (SELECT user_id, unnest(tag) tag FROM tags) x WHERE tag ILIKE '%" + string + "%' AND user_id = " + userId);
         Set<String> set = new HashSet<>();
         while (rs.next()) {
             String tag = rs.getString("tag");
@@ -116,10 +117,10 @@ public class TagExtractor {
         return set;
     }
 
-    public static Set<Long> findFileIds(String tag) throws SQLException {
+    public static Set<Long> findFileIds(String tag, long userId) throws SQLException {
         Connection connection = getConnection();
         Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery("SELECT DISTINCT file_id FROM tags WHERE '" + tag + "' = ANY(tag)");
+        ResultSet rs = st.executeQuery("SELECT DISTINCT file_id FROM tags WHERE '" + tag + "' = ANY(tag) AND user_id = " + userId);
         Set<Long> set = new HashSet<>();
         while (rs.next()) {
             long id = rs.getLong("file_id");
