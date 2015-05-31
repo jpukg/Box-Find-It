@@ -19,9 +19,9 @@ import java.io.IOException;
  */
 public class BoxCreateSharedLink {
     private static final JsonParser parser = new JsonParser();
-
     private static final String URL = "https://api.box.com/2.0/files/";
-    public String createPrivateLink(long fileId, BoxAccount boxAccount) throws IOException {
+
+    public static String createPrivateLink(long fileId, BoxAccount boxAccount) throws IOException {
         HttpPut request = new HttpPut(URL + fileId);
         System.out.println("Create private link by " + boxAccount);
         request.addHeader("Authorization", "Bearer " + boxAccount.accessToken);

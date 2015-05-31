@@ -69,6 +69,7 @@ public class BoxListServlet extends HttpServlet {
                     generator.writeStartObject();
                     generator.write("name", file.getName());
                     generator.write("preview", BoxPreview.getThumbnail(file.getId(), boxAccount));
+                    generator.write("link", BoxCreateSharedLink.createPrivateLink(file.getId(), boxAccount));
                     generator.writeEnd();
                 }
             } else {
