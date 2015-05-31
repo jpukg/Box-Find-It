@@ -19,8 +19,8 @@ public class BoxAccount {
     private static final String FOLDERS_URL = "https://api.box.com/2.0/folders/";
     private static final String FILES_URL = "https://api.box.com/2.0/files/";
     private static final JsonParser parser = new JsonParser();
-    private String accessToken;
-    private String refreshToken;
+    String accessToken;
+    String refreshToken;
     private BoxDirectory root;
 
     public BoxAccount(String json) throws IOException {
@@ -40,7 +40,7 @@ public class BoxAccount {
             System.out.println("getFileContent: " + statusLine);
             if (statusLine.getStatusCode() != 200) {
                 System.out.println("Tried to get content of " + fileId + ", but something got wrong");
-                System.out.println("getFileContent: " + EntityUtils.toString(entity));
+                //System.out.println("getFileContent: " + EntityUtils.toString(entity));
                 throw new IllegalStateException("Got status code: " + statusLine.getStatusCode() + ", expected 200");
             }
             if (entity != null) {

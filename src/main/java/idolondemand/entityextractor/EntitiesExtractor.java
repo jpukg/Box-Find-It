@@ -30,6 +30,7 @@ public class EntitiesExtractor {
     private static final String BASE_URL = "https://api.idolondemand.com/1/api/sync/extractentities/v1";
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko)" +
             " Chrome/41.0.2228.0 Safari/537.36";
+    private static StringBody apiKeyBody = new StringBody(Constants.API_KEY, ContentType.TEXT_PLAIN);
 
     public static Set<String> fetchByText(String text, EntityType... types) throws IOException {
         StringBuilder generated = new StringBuilder(BASE_URL).append("?apikey=")
@@ -47,7 +48,6 @@ public class EntitiesExtractor {
         HttpPost request = new HttpPost(BASE_URL);
         request.addHeader("User-Agent", USER_AGENT);
         FileBody fileBody = new FileBody(file);
-        StringBody apiKeyBody = new StringBody(Constants.API_KEY, ContentType.TEXT_PLAIN);
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create()
                 .addPart("file", fileBody)
                 .addPart("apikey", apiKeyBody);
