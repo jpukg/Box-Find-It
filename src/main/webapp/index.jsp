@@ -12,7 +12,6 @@
 <%@ page import="org.apache.http.HttpEntity" %>
 <%@ page import="org.apache.http.util.EntityUtils" %>
 <%@ page import="box.BoxAccount" %>
-<%@ page import="java.util.Set" %>
 <%@ page import="ourapp.TagExtractor" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="ourapp.Constants" %>
@@ -88,6 +87,19 @@
 
         .preview {
             text-align: center;
+        }
+
+        .preview .textDiv {
+            color: white;
+            display: none;
+        }
+
+        .preview:hover {
+            box-shadow: inset -6px -200px 56px -190px rgba(0,0,0,0.75);
+        }
+
+        .preview:hover .textDiv {
+            display: inline-block;
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -205,18 +217,20 @@
             $.each(data, function(key, val) {
                 var cell = document.createElement("div");
                 var innerDiv = document.createElement("div");
+                innerDiv.onclick(function() {
+                    window.open(val.link, "_blank");
+                });
                 cell.className = "col-md-3";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
                 var textDiv = document.createElement("div");
+                textDiv.className = "textDiv";
                 var s = val.name;
                 if (s.length > 25) {
                     s = s.substr(0, 25) + "...";
                 }
                 var textNode = document.createTextNode(s);
-                textDiv.style.position = "absolute";
-                textDiv.style.bottom = "5px";
-                textDiv.style.boxShadow = "inset -6px -200px 56px -150px rgba(0,0,0,0.75);"
+                innerDiv.style.paddingTop = "230px";
                 textDiv.appendChild(textNode);
                 innerDiv.appendChild(textDiv);
                 cell.appendChild(innerDiv);
