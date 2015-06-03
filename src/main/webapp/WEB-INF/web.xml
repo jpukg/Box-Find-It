@@ -22,5 +22,14 @@
         <url-pattern>/find</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>jsonServlet</servlet-name>
+        <servlet-class>servlets.JsonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jsonServlet</servlet-name>
+        <url-pattern>/query.json</url-pattern>
+    </servlet-mapping>
+
 </web-app>
 

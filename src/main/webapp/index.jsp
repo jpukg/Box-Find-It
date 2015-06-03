@@ -121,37 +121,38 @@
     String entityString = "";
     Map<String, Integer> map = null;
     long id = -1;
-    PrintWriter pw = response.getWriter();
-    if (request.getAttribute("error") != null) {
-        pw.println("Something went wrong, sorry");
-    } else {
-        String code = request.getParameter("code");
-        String state = request.getParameter("state");
-        if (!state.equals(Constants.SECURE_STATE)) {
-            pw.println("Malformed request, sorry");
+    try (PrintWriter pw = response.getWriter()) {
+        if (request.getAttribute("error") != null) {
+            pw.println("Something went wrong, sorry");
         } else {
-            HttpClient httpclient = HttpClients.createDefault();
-            HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
-            List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-            params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-            params.add(new BasicNameValuePair("code", code));
-            params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
-            params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
-            post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            HttpResponse resp = httpclient.execute(post);
-            HttpEntity entity = resp.getEntity();
-            if (entity != null) {
-                entityString = EntityUtils.toString(entity);
-                BoxAccount boxAccount = new BoxAccount(entityString);
-                id = BoxUserInfo.getUserId(boxAccount);
-                try {
-                    map = TagExtractor.extract(boxAccount, id);
-                    System.out.println(map);
-                } catch (URISyntaxException | SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+            String code = request.getParameter("code");
+            String state = request.getParameter("state");
+            if (!state.equals(Constants.SECURE_STATE)) {
+                pw.println("Malformed request, sorry");
             } else {
-                pw.println("Couldn't connect to server");
+                HttpClient httpclient = HttpClients.createDefault();
+                HttpPost post = new HttpPost("https://app.box.com/api/oauth2/token");
+                List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+                params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+                params.add(new BasicNameValuePair("code", code));
+                params.add(new BasicNameValuePair("client_id", BoxApiConstants.CLIENT_ID));
+                params.add(new BasicNameValuePair("client_secret", BoxApiConstants.CLIENT_SECRET));
+                post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+                HttpResponse resp = httpclient.execute(post);
+                HttpEntity entity = resp.getEntity();
+                if (entity != null) {
+                    entityString = EntityUtils.toString(entity);
+                    BoxAccount boxAccount = new BoxAccount(entityString);
+                    id = BoxUserInfo.getUserId(boxAccount);
+                    try {
+                        map = TagExtractor.extract(boxAccount, id);
+                        System.out.println(map);
+                    } catch (URISyntaxException | SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    pw.println("Couldn't connect to server");
+                }
             }
         }
     }
