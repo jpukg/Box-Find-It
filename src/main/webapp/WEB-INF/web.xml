@@ -3,6 +3,24 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>Box Find It!</display-name>
+    <servlet>
+        <servlet-name>authServlet</servlet-name>
+        <servlet-class>servlets.BoxAuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>authServlet</servlet-name>
+        <url-pattern>/auth</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>listServlet</servlet-name>
+        <servlet-class>servlets.BoxListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>listServlet</servlet-name>
+        <url-pattern>/find</url-pattern>
+    </servlet-mapping>
+
 </web-app>
 
