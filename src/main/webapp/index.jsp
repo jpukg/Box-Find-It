@@ -250,7 +250,7 @@
                 innerDiv.onclick = function() {
                     window.open(val.link, "_blank");
                 };
-                cell.className = "col-lg-3 col-md-3 col-sm-3 col-xs-3";
+                cell.className = "col-lg-3 col-md-3 col-sm-4 col-xs-6";
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
                 var textDiv = document.createElement("div");
