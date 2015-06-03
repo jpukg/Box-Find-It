@@ -147,11 +147,7 @@
                 try {
                     map = TagExtractor.extract(boxAccount, id);
                     System.out.println(map);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (URISyntaxException | SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {

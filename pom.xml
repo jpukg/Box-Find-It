@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.heroku.sample</groupId>
-    <artifactId>webappRunnerSample</artifactId>
+    <groupId>ru.ifmo.ctddev.elite</groupId>
+    <artifactId>boxfindit</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>webappRunnerSample Maven Webapp</name>
+    <name>Box Find It!</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <tomcat.version>7.0.57</tomcat.version>
+        <tomcat.version>8.0.23</tomcat.version>
     </properties>
 
     <dependencies>
