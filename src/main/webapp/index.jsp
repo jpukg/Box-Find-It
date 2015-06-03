@@ -250,7 +250,11 @@
                 innerDiv.onclick = function() {
                     window.open(val.link, "_blank");
                 };
+<<<<<<< HEAD
                 cell.className = "col-md-3 col-s-4 col-xs-6";
+=======
+                cell.className = "col-lg-3 col-md-3 col-sm-3 col-xs-3";
+>>>>>>> master
                 innerDiv.style.backgroundImage = "url('" + val.preview + "')";
                 innerDiv.className = "preview";
                 var textDiv = document.createElement("div");
