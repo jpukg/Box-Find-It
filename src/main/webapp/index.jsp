@@ -185,8 +185,7 @@
         }
         Collections.shuffle(list);
         for(Map.Entry<String, Integer> entry : list) {
-            System.out.println(entry);
-            //out.write(String.format("<a onclick=\"doSearch('%s'); $('#q').val('%s');\" rel='%d'>%s </a>", entry.getKey(), entry.getKey(), entry.getValue(), entry.getKey()));
+            out.write(String.format("<a onclick=\"doSearch('%s'); $('#q').val('%s');\" rel='%d'>%s </a>", entry.getKey(), entry.getKey(), entry.getValue(), entry.getKey()));
         }
     %>
 </div>
