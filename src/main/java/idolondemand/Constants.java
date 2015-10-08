@@ -5,5 +5,5 @@ package idolondemand;
  */
 public class Constants {
     //public static final String API_KEY = "4bb35183-31bd-4459-9303-fdfb82d7c326";
-    public static final String API_KEY = "5a9415cd-3853-4208-a098-0ec621648832";
+    public static final String API_KEY = "itl3bu20a7q3lw53gpftwo4szz08gvm6";
 }
