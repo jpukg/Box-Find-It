@@ -72,7 +72,7 @@ public class TagExtractor {
                             EntityType.BANKACCOUNT, EntityType.DATE, EntityType.INTERNET, EntityType.NUMBER_PHONES,
                             EntityType.UNIVERSITY);
                     for (String tag : tags) {
-                        result.putIfAbsent(tag, 0);
+                        result.put(tag, 0);
                         result.put(tag, result.get(tag) + 1);
                     }
                     String[] array = new String[tags.size()];
@@ -88,14 +88,14 @@ public class TagExtractor {
                     Array array = rs.getArray("tag");
                     String[] tags = (String[]) array.getArray();
                     for (String tag : tags) {
-                        result.putIfAbsent(tag, 0);
+                        result.put(tag, 0);
                         result.put(tag, result.get(tag) + 1);
                     }
                 }
             } else {
                 Map<String, Integer> tags = extract((BoxDirectory) element, boxAccount, userId);
                 for (Map.Entry<String, Integer> tag : tags.entrySet()) {
-                    result.putIfAbsent(tag.getKey(), 0);
+                    result.put(tag.getKey(), 0);
                     result.put(tag.getKey(), result.get(tag.getKey()) + tag.getValue());
                 }
             }
